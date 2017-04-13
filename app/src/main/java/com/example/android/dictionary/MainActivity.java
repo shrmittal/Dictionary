@@ -29,14 +29,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
     private static final int WORD_LOADER=0;
-
+    public static ArrayList<HashMap<String, String>> arr = new ArrayList<HashMap<String, String>>();
     EditText search;
     ListView lv;
-
     newCursorAdapter mCursorAdapter;
-
     List<Word> wordList;
-    public static ArrayList<HashMap<String,String>> arr=new ArrayList<HashMap<String,String>>();
     SimpleAdapter simpleAdapter;
 
     @Override
@@ -111,7 +108,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 // String str= parent.getItemAtPosition(position).toString();
 
-
+                //jhjhjhjhjhjhjhjhjhjhjhjhj
+                int j, k;
+                j = 10;
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int wordColumnIndex = cursor.getColumnIndex(DataBaseHandler.COLUMN_WORD);
                 int meanColumnIndex = cursor.getColumnIndex(DataBaseHandler.COLUMN_MEANING);
