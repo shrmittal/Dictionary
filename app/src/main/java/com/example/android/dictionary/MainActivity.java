@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivity extends AppCompatActivity{
 
 
     private static final int WORD_LOADER=0;
@@ -58,11 +58,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         search=(EditText)findViewById(R.id.search);
         lv=(ListView)findViewById(R.id.list);
 
-       mCursorAdapter=new newCursorAdapter(this,null);
-        lv.setAdapter(mCursorAdapter);
+      /* mCursorAdapter=new newCursorAdapter(this,null);
+        lv.setAdapter(mCursorAdapter);*/
 
 
-      /* DataBaseHandler db=new DataBaseHandler(MainActivity.this);
+       DataBaseHandler db=new DataBaseHandler(MainActivity.this);
         wordList=db.getAllWords();
 
        int i=0;
@@ -77,12 +77,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
         simpleAdapter=new SimpleAdapter(getApplicationContext(),arr,R.layout.list_item,new String[]{"Word"},new int[]{R.id.name});
-        lv.setAdapter(simpleAdapter);*/
+        lv.setAdapter(simpleAdapter);
 
 
 
 
-       /* search.addTextChangedListener(new TextWatcher() {
+       search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 MainActivity.this.simpleAdapter.getFilter().filter(charSequence);
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void afterTextChanged(Editable editable) {
 
             }
-        });*/
+        });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -109,17 +109,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 AlertDialog.Builder adb = new AlertDialog.Builder(
                         MainActivity.this);
 
-                // String str= parent.getItemAtPosition(position).toString();
+                 String str= parent.getItemAtPosition(position).toString();
 
 
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+               /* Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int wordColumnIndex = cursor.getColumnIndex(DataBaseHandler.COLUMN_WORD);
                 int meanColumnIndex = cursor.getColumnIndex(DataBaseHandler.COLUMN_MEANING);
 
                 String word = cursor.getString(wordColumnIndex);
                 String meaning = cursor.getString(meanColumnIndex);
 
-                String str = word + " " + meaning;
+                String str = word + " " + meaning;*/
                /* HashMap<String,String> word=new HashMap<String, String>();
                 word=arr.get(position);*/
 
@@ -137,14 +137,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
 
-        getLoaderManager().initLoader(WORD_LOADER, null, this);
+       // getLoaderManager().initLoader(WORD_LOADER, null, this);
 
-        NodeClass nodeClass=new NodeClass();
+       /* NodeClass nodeClass=new NodeClass();
         for(int i=0;i<arr.size();i++){
             HashMap<String,String> word=new HashMap<String, String>();
             word=arr.get(i);
 
-        }
+        }*/
 
     }
 
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
 
-    @Override
+   /* @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
         String [] projection ={
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void word_search(View v){
 
 
-    }
+    }*/
 
 
 
