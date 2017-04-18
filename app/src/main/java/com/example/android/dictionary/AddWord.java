@@ -43,6 +43,7 @@ public class AddWord extends AppCompatActivity{
                 values.put(DataBaseHandler.COLUMN_WORD,n);
                 values.put(DataBaseHandler.COLUMN_MEANING, m);
 
+
                 Uri newUri=getContentResolver().insert(DataProvider.CONTENT_URI,values);
                 if (newUri == null)
                     Toast.makeText(AddWord.this, "Error saving word", Toast.LENGTH_SHORT).show();

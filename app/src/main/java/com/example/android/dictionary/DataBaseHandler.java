@@ -15,13 +15,12 @@ import java.util.List;
  */
 public class DataBaseHandler extends SQLiteOpenHelper implements BaseColumns{
 
+    public static final String TABLE_NAME = "store";
+    public static final String _ID = BaseColumns._ID;
+    public static final String COLUMN_WORD = "word";
+    public static final String COLUMN_MEANING = "meaning";
     private static final String DATABASE_NAME="dictionary.db";
     private static final int DATABASE_VERSION=1;
-    public static final String TABLE_NAME="store";
-
-    public static final String _ID=BaseColumns._ID;
-    public static final String COLUMN_WORD="word";
-    public static final String COLUMN_MEANING="meaning";
 
 
     public DataBaseHandler(Context context) {
@@ -56,8 +55,8 @@ public class DataBaseHandler extends SQLiteOpenHelper implements BaseColumns{
         db.close();
     }
 
-    public List<Word> getAllWords(){
-        List<Word> wordList=new ArrayList<Word>();
+    public ArrayList<Word> getAllWords() {
+        ArrayList<Word> wordList = new ArrayList<Word>();
 
              String selectQuery=   "SELECT *FROM "+TABLE_NAME;
         SQLiteDatabase db=this.getReadableDatabase();

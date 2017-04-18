@@ -13,10 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -25,16 +27,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivity extends AppCompatActivity {
 
 
     private static final int WORD_LOADER=0;
     public static ArrayList<HashMap<String, String>> arr = new ArrayList<HashMap<String, String>>();
     EditText search;
     ListView lv;
+    Button b;
     newCursorAdapter mCursorAdapter;
-    List<Word> wordList;
+    ArrayList<Word> wordList;
     SimpleAdapter simpleAdapter;
+    WordAdapter itemAdapter;
+    ClassNode node;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +60,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         search=(EditText)findViewById(R.id.search);
         lv=(ListView)findViewById(R.id.list);
+        b = (Button) findViewById(R.id.button_search);
 
-       mCursorAdapter=new newCursorAdapter(this,null);
-        lv.setAdapter(mCursorAdapter);
+
+        DataBaseHandler dataBaseHandler = new DataBaseHandler(this);
+        wordList = dataBaseHandler.getAllWords();
+
+        node = new ClassNode();
+        for (int i = 0; i < wordList.size(); i++) {
+            Word w = wordList.get(i);
+            String word = w.getWord();
+            String mean = w.getMean();
+            node.put(word, mean);
+        }
+
+        itemAdapter = new WordAdapter(MainActivity.this, 0, wordList);
+        lv.setAdapter(itemAdapter);
+
+      /* mCursorAdapter=new newCursorAdapter(this,null);
+        lv.setAdapter(mCursorAdapter);*/
 
 
       /* DataBaseHandler db=new DataBaseHandler(MainActivity.this);
@@ -111,14 +133,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 //jhjhjhjhjhjhjhjhjhjhjhjhj
                 int j, k;
                 j = 10;
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+               /* Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int wordColumnIndex = cursor.getColumnIndex(DataBaseHandler.COLUMN_WORD);
                 int meanColumnIndex = cursor.getColumnIndex(DataBaseHandler.COLUMN_MEANING);
 
                 String word = cursor.getString(wordColumnIndex);
-                String meaning = cursor.getString(meanColumnIndex);
+                String meaning = cursor.getString(meanColumnIndex);*/
+                Word word = wordList.get(position);
+                String w = word.getWord() + " " + word.getMean() + " " + word.getId();
 
-                String str = word + " " + meaning;
+
+                String str = w;
                /* HashMap<String,String> word=new HashMap<String, String>();
                 word=arr.get(position);*/
 
@@ -134,16 +159,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
 
+        // getLoaderManager().initLoader(WORD_LOADER, null, this);
 
 
-        getLoaderManager().initLoader(WORD_LOADER, null, this);
-
-        NodeClass nodeClass=new NodeClass();
-        for(int i=0;i<arr.size();i++){
-            HashMap<String,String> word=new HashMap<String, String>();
-            word=arr.get(i);
-
-        }
 
     }
 
@@ -160,20 +178,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+            //noinspection SimplifiableIfStatement
+            case R.id.action_settings:
+                return true;
+            case R.id.action_delete_all_entries:
+                deleteAllWords();
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteAllWords() {
+        int rowsDeleted = getContentResolver().delete(DataProvider.CONTENT_URI, null, null);
+        Log.v("MainActivity", rowsDeleted + " rows deleted from word database");
+        // itemAdapter.notifyDataSetChanged();
     }
 
 
 
 
-    @Override
+  /*  @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
         String [] projection ={
@@ -195,12 +222,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<Cursor> loader) {
         mCursorAdapter.swapCursor(null);
 
-    }
+    }*/
 
 
     public void word_search(View v){
+        String s = search.getText().toString();
 
-
+        String t = node.contains(s);
+        Log.v("MainActivity: ", t);
     }
 
 

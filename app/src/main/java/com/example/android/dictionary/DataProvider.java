@@ -18,24 +18,17 @@ public class DataProvider extends ContentProvider {
 
 
     public static final String LOG_TAG=DataProvider.class.getSimpleName();
-
-    private static final int DATA=100;
-
-    private static final UriMatcher sUriMatcher=new UriMatcher(UriMatcher.NO_MATCH);
-
     public final static String CONTENT_AUTHORITY="com.example.android.dictionary";
     public static final Uri BASE_CONTENT_URI=Uri.parse("content://"+CONTENT_AUTHORITY);
     public final static String PATH_DATA="store";
     public final static Uri CONTENT_URI=Uri.withAppendedPath(BASE_CONTENT_URI, PATH_DATA);
-
-
     /**
      * The MIME type of the {@link #CONTENT_URI} for a list of words.
      */
     public static final String CONTENT_LIST_TYPE =
             ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_DATA;
-
-
+    private static final int DATA = 100;
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static
     {
@@ -113,7 +106,28 @@ public class DataProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String s, String[] strings) {
-        return 0;
+
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case DATA:
+                getContext().getContentResolver().notifyChange(uri, null);
+                // Delete all rows that match the selection and selection args
+                return database.delete(DataBaseHandler.TABLE_NAME, s, strings);
+           /* case PETS_ID:
+                // Delete a single row given by the ID in the URI
+                selection = PetContract.PetEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                getContext().getContentResolver().notifyChange(uri,null);
+                return database.delete(PetContract.PetEntry.TABLE_NAME, selection, selectionArgs);
+                */
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+
+
     }
 
     @Override
